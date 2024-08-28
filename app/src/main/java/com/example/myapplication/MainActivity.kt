@@ -18,6 +18,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,6 +64,7 @@ Funções anotadas com ela seguem a convenção PascalCase
 */
 @Composable
 fun Tela(name: String, modifier: Modifier = Modifier) { // modifier: CSS do componente
+    var mostrarImagem by remember { mutableStateOf(true) }
     Column(modifier = Modifier) { // Column organiza um embaixo do outro
         Row {
             Text(
@@ -102,14 +107,19 @@ fun Tela(name: String, modifier: Modifier = Modifier) { // modifier: CSS do comp
             modifier = modifier.fillMaxWidth(), // dp -> unidade para o uso de dimensões e desenhos
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = { }) {
-                Text(text="Clica aqui")
+            Button(onClick = { mostrarImagem = false }) {
+                Text(text="Esconder Imagem")
             }
-            Image(
-                painter = painterResource(id = R.mipmap.doraaventureira),
-                contentDescription = "The Rock Dora Aventureira",
-                modifier = modifier.size(250.dp)
-            )
+            if (mostrarImagem) {
+                Image(
+                    painter = painterResource(id = R.mipmap.doraaventureira),
+                    contentDescription = "The Rock Dora Aventureira",
+                    modifier = modifier.size(250.dp)
+                )
+            }
+            Button(onClick = { mostrarImagem = true }) {
+                Text(text="Mostrar Imagem")
+            }
         }
     }
 }
