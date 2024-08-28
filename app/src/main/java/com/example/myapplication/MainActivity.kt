@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,21 +65,22 @@ Funções anotadas com ela seguem a convenção PascalCase
 */
 @Composable
 fun Tela(name: String, modifier: Modifier = Modifier) { // modifier: CSS do componente
+    // Aqui criamos um 'remember' de valor boolean
     var mostrarImagem by remember { mutableStateOf(true) }
+    var cidade by remember { mutableStateOf("") }
+    var cidadeInvalida by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier) { // Column organiza um embaixo do outro
-        Row {
-            Text(
-                text = "Hello, $name!",
-                style = TextStyle(
-                    fontSize = 25.sp, // sp -> unidade para uso de tamanho de fonte
-                    color = Color.Blue,
-                    fontStyle = FontStyle.Italic,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
+        Text(
+            text = "Primeira aplicação $name!",
+            style = TextStyle(
+                fontSize = 25.sp, // sp -> unidade para uso de tamanho de fonte
+                color = Color(156, 39, 176, 255),
+                fontStyle = FontStyle.Italic,
+                textDecoration = TextDecoration.Underline,
+                fontWeight = FontWeight.Bold
             )
-            Text(text = "Segunda linha", color = Color(156, 39, 176, 255))
-        }
+        )
         Row(
             modifier = modifier.padding(25.dp), // dp -> unidade para o uso de dimensões e desenhos
             horizontalArrangement = Arrangement.Center
@@ -89,18 +91,10 @@ fun Tela(name: String, modifier: Modifier = Modifier) { // modifier: CSS do comp
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier.weight(0.5f) // Indica quantos % do "pai" será ocupada
             ) {
-                Text(text = "Linha 2, coluna 1", fontSize = 20.sp)
+                Text(text = "Aprendendo a criar uma", fontSize = 20.sp)
                 // Dá um espaço na horizontal quando estiver em uma Row
                 Spacer(modifier = Modifier.width(20.dp))
-                Text(text = "Linha 3, coluna 1", fontSize = 20.sp)
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier.weight(0.5f)
-            ) {
-                Text(text = "Linha 2, coluna 2", fontSize = 20.sp)
-                Spacer(modifier = Modifier.width(20.dp))
-                Text(text = "Linha 3, coluna 2", fontSize = 20.sp)
+                Text(text = "aplicação Android em Kotlin", fontSize = 20.sp)
             }
         }
         Column(
@@ -110,6 +104,14 @@ fun Tela(name: String, modifier: Modifier = Modifier) { // modifier: CSS do comp
             Button(onClick = { mostrarImagem = false }) {
                 Text(text="Esconder Imagem")
             }
+                /*
+                A imagem...
+                Não pode ter letras maiúsculas
+                Não pode ter caracteres especial
+                Não pode ter espaços em branco
+                Não pode ter hífen
+                Não pode começar com número
+                */
             if (mostrarImagem) {
                 Image(
                     painter = painterResource(id = R.mipmap.doraaventureira),
@@ -120,6 +122,20 @@ fun Tela(name: String, modifier: Modifier = Modifier) { // modifier: CSS do comp
             Button(onClick = { mostrarImagem = true }) {
                 Text(text="Mostrar Imagem")
             }
+
+            OutlinedTextField(
+                label = { Text("Qual a cidade?") },
+                value = cidade, // Seu valor será o do 'remember' cidade
+                onValueChange = { cidade = it },
+                // O valor do 'remember' cidade se altera conforme o que for digitado
+                supportingText = {
+                    cidadeInvalida = (cidade.isNotBlank() && cidade.length < 3)
+                    if (cidadeInvalida) {
+                        Text(text = "Cidade ter 3 ou mais letras")
+                    }
+                },
+                isError = cidadeInvalida
+            )
         }
     }
 }
